@@ -353,7 +353,7 @@ services:
 | 📈 Predictive Carbon Analytics (time-series ML) | 🗺️ Planned |
 | 📱 React Native Mobile App | 🗺️ Planned |
 | 🔌 IoT Sensor Integration | 🗺️ Planned |
-| 🔗 Native Odoo ERP Connector | 🗺️ Planned |
+| 🔗 Native Odoo![alt text](image.png) ERP Connector | 🗺️ Planned |
 | 📊 Power BI / Looker Connector | 🗺️ Planned |
 | 💬 Slack / Microsoft Teams Integration | 🗺️ Planned |
 | 🏅 ESG Benchmarking vs. Industry Standards | 🗺️ Planned |
