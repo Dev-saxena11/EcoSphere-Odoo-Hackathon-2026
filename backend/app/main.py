@@ -10,6 +10,7 @@ from app.api.v1.csr_activities import router as csr_activities_router
 from app.api.v1.departments import router as departments_router
 from app.api.v1.emission_factors import router as emission_factors_router
 from app.api.v1.policies import router as policies_router
+from app.api.v1.auth import router as auth_router
 
 app = FastAPI(title="EcoSphere API", version="1.0.0")
 app.include_router(carbon_transactions_router, prefix="/api/v1")
@@ -18,4 +19,5 @@ app.include_router(csr_activities_router, prefix="/api/v1")
 app.include_router(departments_router, prefix="/api/v1")
 app.include_router(emission_factors_router, prefix="/api/v1")
 app.include_router(policies_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1")
 

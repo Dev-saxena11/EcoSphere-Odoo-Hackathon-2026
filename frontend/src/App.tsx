@@ -42,8 +42,12 @@ import {
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
+<<<<<<< HEAD
 import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
 import { carbonTransactionsApi } from "./api/carbonTransactions";
+=======
+import AuthScreen from "./features/auth/AuthScreen";
+>>>>>>> b8c4d79 (feat: Add full-stack JWT Registration and Login)
 // TypeScript types from local types file
 import {
   User,
@@ -404,6 +408,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
 
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("ecosphere_token"));
   const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
   const [user, setUser] = useState<User>(MOCK_USER);
   const [transactions, setTransactions] = useState<CarbonTransaction[]>([]);
@@ -430,6 +435,17 @@ export default function App() {
   const handleUserXpUpdate = (xp: number) => {
     setUser((prev) => ({ ...prev, xp_points: prev.xp_points + xp }));
   };
+
+  const handleLogin = (token: string, loggedInUser: User) => {
+    localStorage.setItem("ecosphere_token", token);
+    setUser(loggedInUser);
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("ecosphere_token");
+    setIsAuthenticated(false);
+  };
   // --- Governance score (live) ---
   const activePolicies = policies.filter((p) => p.status === "active");
   const ackedCount = activePolicies.filter((p) => !!acknowledgedPolicies[p.id]).length;
@@ -439,6 +455,10 @@ export default function App() {
 
   if (showLanding) {
     return <LandingPage onEnterDashboard={() => setShowLanding(false)} />;
+  }
+
+  if (!isAuthenticated) {
+    return <AuthScreen onLogin={handleLogin} />;
   }
 
   return (
@@ -490,8 +510,8 @@ export default function App() {
         {/* User Mini Profile */}
         <div className="p-4 border-t border-brand-border bg-slate-950/70">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-emerald flex items-center justify-center font-bold text-white shadow-lg">
-              DS
+            <div className="w-10 h-10 rounded-xl bg-gradient-emerald flex items-center justify-center font-bold text-white shadow-lg shrink-0">
+              {user.full_name.substring(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold truncate">{user.full_name}</p>
@@ -504,6 +524,9 @@ export default function App() {
                 </span>
               </div>
             </div>
+            <button onClick={handleLogout} className="p-2 text-gray-500 hover:text-rose-400 transition-colors" title="Logout">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
           </div>
         </div>
       </aside>
