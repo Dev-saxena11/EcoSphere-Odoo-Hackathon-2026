@@ -319,7 +319,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
           <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 text-[#f8f2df] lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div>
               <p className="mb-5 max-w-xl text-sm font-semibold lowercase tracking-[0.24em] text-[#d7e2b6]">
-                esg operating system for odoo
+                an esg layer for modern erp workflows
               </p>
               <h1 className="max-w-5xl text-[clamp(4rem,12vw,10.5rem)] font-black lowercase leading-[0.82] tracking-normal">
                 ecosphere
@@ -344,24 +344,131 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
           </div>
         </section>
 
-        <section id="system" className="px-4 py-24 md:py-32">
-          <div className="mx-auto max-w-6xl">
-            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
-              we are building an esg command layer
-            </p>
-            <h2 className="max-w-5xl text-[clamp(3rem,8vw,8.5rem)] font-black lowercase leading-[0.88] tracking-normal">
-              making sustainability data feel alive.
-            </h2>
-            <button
-              onClick={onEnterDashboard}
-              className="mt-10 inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#11110f] px-6 py-4 text-sm font-black lowercase text-[#f6f0df] transition hover:bg-[#53652c]"
-            >
-              launch dashboard
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
+        {/* ── PROBLEM STATEMENT & COMMAND LAYER ───────────────────────────────── */}
+        <section id="system" className="px-4 py-24 md:py-32 border-t border-black/10">
+          <div className="mx-auto max-w-6xl grid gap-12 lg:grid-cols-[1fr_1.3fr] items-start">
+            <div className="max-w-md">
+              <p className="mb-6 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+                / the tension /
+              </p>
+              <p className="text-xl md:text-2xl font-bold lowercase leading-relaxed text-[#444638]">
+                most companies already track operations digitally, but esg data — emissions, csr participation, policy compliance — lives in spreadsheets and gets reconstructed after the fact instead of measured as it happens.
+              </p>
+            </div>
+            <div>
+              <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+                we are building an esg command layer
+              </p>
+              <h2 className="max-w-5xl text-[clamp(2.5rem,6vw,6.5rem)] font-black lowercase leading-[0.9] tracking-normal">
+                making sustainability data feel alive.
+              </h2>
+              <button
+                onClick={onEnterDashboard}
+                className="mt-10 inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#11110f] px-6 py-4 text-sm font-black lowercase text-[#f6f0df] transition hover:bg-[#53652c]"
+              >
+                launch dashboard
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </section>
 
+        {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
+        <section id="how-it-works" className="px-4 py-24 md:py-32 border-t border-black/10">
+          <div className="mx-auto max-w-6xl">
+            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+              how it actually works
+            </p>
+            <h2 className="mb-16 max-w-5xl text-[clamp(2.5rem,5.5vw,5.5rem)] font-black lowercase leading-[0.9] tracking-normal">
+              the operational flow.
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                {
+                  num: "01",
+                  tag: "setup",
+                  head: "master data config",
+                  desc: "define carbon factors, import policies, and establish department goals."
+                },
+                {
+                  num: "02",
+                  tag: "operations",
+                  head: "daily activity",
+                  desc: "log logistics, energy purchases, travel expenses, and policy updates."
+                },
+                {
+                  num: "03",
+                  tag: "ingestion",
+                  head: "automatic calculation",
+                  desc: "transactions auto-calculate co2 emissions while employees submit csr proof."
+                },
+                {
+                  num: "04",
+                  tag: "aggregation",
+                  head: "continuous scores",
+                  desc: "metrics feed environmental, social, and governance pillar calculations."
+                },
+                {
+                  num: "05",
+                  tag: "dashboard",
+                  head: "overall scorecard",
+                  desc: "real-time esg dashboard metrics, leaderboards, and auditable logs."
+                }
+              ].map((step, idx) => (
+                <div key={idx} className="border-t border-black/20 pt-6 flex flex-col justify-between min-h-[14rem]">
+                  <div>
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="text-2xl font-black lowercase">{step.num}.</span>
+                      <span className="text-xs italic text-[#53652c]">/{step.tag}/</span>
+                    </div>
+                    <h3 className="text-lg font-black lowercase leading-tight mb-4">{step.head}</h3>
+                  </div>
+                  <p className="text-sm font-semibold lowercase leading-snug text-[#444638]">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── PRODUCT PROOF ───────────────────────────────────────────────────── */}
+        <section id="proof" className="px-4 py-24 md:py-32 bg-[#11110f] text-[#f6f0df] border-t border-white/5">
+          <div className="mx-auto max-w-6xl">
+            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#b8c886]">
+              built and functional
+            </p>
+            <h2 className="mb-16 max-w-5xl text-[clamp(2.5rem,5.5vw,5.5rem)] font-black lowercase leading-[0.9] tracking-normal">
+              product proof.
+            </h2>
+            <div className="grid gap-12 lg:grid-cols-2">
+              <div className="flex flex-col gap-4">
+                <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+                  <img
+                    src="/resources/dashboard_summary.png"
+                    alt="EcoSphere ESG Summary Dashboard"
+                    className="w-full object-cover"
+                  />
+                </div>
+                <p className="text-xs font-semibold lowercase text-[#b8c886]">
+                  the actual dashboard. no mockups.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+                  <img
+                    src="/resources/dashboard_gamification.png"
+                    alt="EcoSphere Governance and Compliance View"
+                    className="w-full object-cover"
+                  />
+                </div>
+                <p className="text-xs font-semibold lowercase text-[#b8c886]">
+                  real policy library and compliance tracking tables.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 3 ESSENTIALS ────────────────────────────────────────────────────── */}
         <section id="modules" className="px-4 py-20">
           <div className="mx-auto max-w-6xl">
             <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
@@ -388,6 +495,83 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
           </div>
         </section>
 
+        {/* ── BUILT WITH REAL RULES ───────────────────────────────────────────── */}
+        <section id="rules" className="px-4 py-24 md:py-32 border-t border-black/10">
+          <div className="mx-auto max-w-6xl">
+            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+              built with real rules
+            </p>
+            <h2 className="mb-16 max-w-5xl text-[clamp(2.5rem,5.5vw,5.5rem)] font-black lowercase leading-[0.9] tracking-normal">
+              enforced logic.
+            </h2>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  num: "01",
+                  title: "automated carbon entries",
+                  desc: "emissions are calculated automatically from operational logs — no manual entry required."
+                },
+                {
+                  num: "02",
+                  title: "instant badge unlocks",
+                  desc: "badges unlock the instant thresholds are crossed, requiring no manual admin intervention."
+                },
+                {
+                  num: "03",
+                  title: "strict reward validation",
+                  desc: "reward redemption checks stock and user xp balances before it lets you spend."
+                },
+                {
+                  num: "04",
+                  title: "mandatory issue ownership",
+                  desc: "every compliance issue has an assigned owner and a strict deadline, or it doesn't exist."
+                }
+              ].map((rule, idx) => (
+                <div key={idx} className="border-t border-black/20 pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-xl font-black text-[#53652c]">{rule.num}</span>
+                    <span className="h-2 w-2 rounded-full bg-[#53652c]"></span>
+                  </div>
+                  <h3 className="text-base font-black lowercase leading-tight mb-2">{rule.title}</h3>
+                  <p className="text-sm font-semibold lowercase leading-relaxed text-[#444638]">{rule.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── WHO IT'S FOR ────────────────────────────────────────────────────── */}
+        <section id="audience" className="px-4 py-24 md:py-32 bg-[#11110f] text-[#f6f0df] border-t border-white/5">
+          <div className="mx-auto max-w-6xl grid gap-12 lg:grid-cols-[1fr_1.3fr] items-start">
+            <div>
+              <p className="mb-6 text-sm font-bold lowercase tracking-[0.28em] text-[#b8c886]">
+                aligned outcomes
+              </p>
+              <h2 className="text-[clamp(2.5rem,5vw,5rem)] font-black lowercase leading-[0.9] tracking-normal">
+                who it is for.
+              </h2>
+            </div>
+            <div className="space-y-8 border-l border-white/10 pl-8 lg:pl-12">
+              {[
+                { role: "esg admin", outcome: "the admin sets the rules, defines emission factors, and weights the dashboard." },
+                { role: "department head", outcome: "the department head owns the carbon footprint and manages local compliance." },
+                { role: "employee", outcome: "the employee earns the points, unlocks badges, and drives grassroots change." },
+                { role: "compliance auditor", outcome: "the auditor keeps the record honest, conducts reviews, and tracks open issues." }
+              ].map((item, idx) => (
+                <div key={idx} className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-6">
+                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-[#b8c886] w-40 shrink-0">
+                    {item.role}
+                  </span>
+                  <span className="text-lg font-semibold lowercase text-[#d1cbba]">
+                    {item.outcome}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── MARQUEE & PILLARS SUMMARY ───────────────────────────────────────── */}
         <section id="impact" className="overflow-hidden py-24">
           <div className="landing-marquee flex min-w-max gap-5 text-[clamp(3rem,8vw,8rem)] font-black lowercase leading-none text-[#11110f]">
             <span>carbon ledger</span>
@@ -416,21 +600,33 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
           </div>
         </section>
 
-        <footer className="bg-[#10100e] px-4 py-14 text-[#f6f0df]">
-          <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-bold lowercase tracking-[0.28em] text-[#b8c886]">ecosphere</p>
-              <h2 className="mt-4 max-w-3xl text-5xl font-black lowercase leading-none md:text-7xl">
-                open the operating view.
-              </h2>
+        {/* ── FOOTER & METADATA ───────────────────────────────────────────────── */}
+        <footer className="bg-[#11110f] px-4 py-14 text-[#f6f0df] border-t border-white/5">
+          <div className="mx-auto max-w-6xl flex flex-col gap-16">
+            <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-sm font-bold lowercase tracking-[0.28em] text-[#b8c886]">ecosphere</p>
+                <h2 className="mt-4 max-w-3xl text-5xl font-black lowercase leading-none md:text-7xl">
+                  open the operating view.
+                </h2>
+              </div>
+              <button
+                onClick={onEnterDashboard}
+                className="inline-flex w-fit items-center gap-2 rounded-full bg-[#f6f0df] px-6 py-4 text-sm font-black lowercase text-[#10100e] transition hover:bg-[#b8c886]"
+              >
+                enter dashboard
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
             </div>
-            <button
-              onClick={onEnterDashboard}
-              className="inline-flex w-fit items-center gap-2 rounded-full bg-[#f6f0df] px-6 py-4 text-sm font-black lowercase text-[#10100e] transition hover:bg-[#b8c886]"
-            >
-              enter dashboard
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
+            
+            <div className="border-t border-white/10 pt-8 flex flex-col gap-4 md:flex-row md:justify-between text-[11px] font-semibold lowercase tracking-wide text-white/40">
+              <p>
+                built on fastapi, postgresql, and a rules engine that does the enforcing.
+              </p>
+              <p>
+                built in 8 hours by a team of 4 for odoo hackathon 2026.
+              </p>
+            </div>
           </div>
         </footer>
       </main>
@@ -482,7 +678,7 @@ export default function App() {
       audio.play().catch(() => {
         // Autoplay blocked — wait for first user interaction
         const resumeOnInteraction = () => {
-          audio.play().catch(() => {});
+          audio.play().catch(() => { });
           window.removeEventListener("click", resumeOnInteraction);
           window.removeEventListener("keydown", resumeOnInteraction);
         };
@@ -558,11 +754,10 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
-                    isActive
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
                       ? "bg-slate-900 border border-brand-border text-white shadow-lg shadow-emerald-500/5"
                       : "text-gray-400 hover:text-white hover:bg-slate-900/50"
-                  }`}
+                    }`}
                 >
                   <Icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${tab.color}`} />
                   <span className="font-medium text-sm">{tab.label}</span>
@@ -607,12 +802,12 @@ export default function App() {
               {activeTab === "summary"
                 ? "Overall Scorecard"
                 : activeTab === "emission_factors"
-                ? "Emission Factors"
-                : activeTab === "automation"
-                ? "Automation"
-                : activeTab === "department_carbon"
-                ? "Department Tracking"
-                : activeTab}
+                  ? "Emission Factors"
+                  : activeTab === "automation"
+                    ? "Automation"
+                    : activeTab === "department_carbon"
+                      ? "Department Tracking"
+                      : activeTab}
             </span>
           </div>
 
@@ -727,8 +922,8 @@ export default function App() {
                       <AreaChart data={MOCK_CARBON_DATA}>
                         <defs>
                           <linearGradient id="emissionsGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.2}/>
-                            <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                            <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
@@ -767,7 +962,7 @@ export default function App() {
                       </ResponsiveContainer>
                     </div>
                   </div>
-                  
+
                   {/* Legend */}
                   <div className="grid grid-cols-2 gap-2 mt-4">
                     {MOCK_PIE_DATA.map((entry) => (
@@ -851,11 +1046,10 @@ export default function App() {
                   <div key={act.id} className="glass-card rounded-2xl flex flex-col justify-between overflow-hidden">
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-center">
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
-                          act.status === "Active"
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${act.status === "Active"
                             ? "bg-teal-950/40 text-teal-400 border-teal-500/20"
                             : "bg-slate-900 text-gray-400 border-brand-border"
-                        }`}>
+                          }`}>
                           {act.status}
                         </span>
                         <div className="flex items-center gap-1 bg-amber-950/40 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full text-[10px] font-bold">
