@@ -45,7 +45,7 @@ export default function AuthScreen({ onLogin }: AuthScreenProps) {
           email: email,
           full_name: email.split('@')[0], // Quick mock name
           role: 'employee',
-          department_id: 1,
+          department_id: null,
           is_active: true,
           xp_points: 0,
           level: 1
@@ -58,7 +58,7 @@ export default function AuthScreen({ onLogin }: AuthScreenProps) {
         const response = await fetch(`${API_URL}/api/v1/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, full_name: fullName, department_id: 1 })
+          body: JSON.stringify({ email, password, full_name: fullName, department_id: null })
         });
         
         if (!response.ok) {
