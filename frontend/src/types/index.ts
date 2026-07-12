@@ -33,6 +33,22 @@ export interface Category {
   status: CategoryStatus;
 }
 
+export type ActivityType = "fuel" | "electricity" | "travel" | "purchase" | "waste" | "water" | "other";
+export type FactorStatus = "active" | "inactive";
+
+export interface EmissionFactor {
+  id: number;
+  factor_code: string;
+  name: string;
+  activity_type: ActivityType;
+  unit: string;
+  co2e_per_unit: number;
+  source?: string;
+  effective_start: string;
+  effective_end?: string;
+  status: FactorStatus;
+}
+
 export type SourceType = "purchase" | "manufacturing" | "expense" | "fleet";
 export type CreatedBy = "auto" | "manual";
 export type TransactionStatus = "draft" | "confirmed" | "cancelled";
