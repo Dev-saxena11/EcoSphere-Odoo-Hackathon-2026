@@ -581,7 +581,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
             <span>audit clarity</span>
           </div>
           <div className="mx-auto mt-20 grid max-w-6xl gap-10 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-            <h2 className="text-[clamp(2.2rem,5.5vw,4.5rem)] font-black lowercase leading-[0.9] tracking-normal">
+            <h2 className="text-[clamp(1.5rem,4.5vw,3.5rem)] font-black lowercase leading-[0.9] tracking-normal">
               one place for proof, progress, and people.
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -618,7 +618,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
                 <ArrowUpRight className="h-4 w-4" />
               </button>
             </div>
-            
+
             <div className="border-t border-white/10 pt-8 flex flex-col gap-4 md:flex-row md:justify-between text-[11px] font-semibold lowercase tracking-wide text-white/40">
               <p>
                 built on fastapi, postgresql, and a rules engine that does the enforcing.
@@ -762,8 +762,8 @@ export default function App() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
-                      ? "bg-slate-900 border border-brand-border text-white shadow-lg shadow-emerald-500/5"
-                      : "text-gray-400 hover:text-white hover:bg-slate-900/50"
+                    ? "bg-slate-900 border border-brand-border text-white shadow-lg shadow-emerald-500/5"
+                    : "text-gray-400 hover:text-white hover:bg-slate-900/50"
                     }`}
                 >
                   <Icon className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${tab.color}`} />
@@ -1054,8 +1054,8 @@ export default function App() {
                     <div className="p-6 space-y-4">
                       <div className="flex justify-between items-center">
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${act.status === "Active"
-                            ? "bg-teal-950/40 text-teal-400 border-teal-500/20"
-                            : "bg-slate-900 text-gray-400 border-brand-border"
+                          ? "bg-teal-950/40 text-teal-400 border-teal-500/20"
+                          : "bg-slate-900 text-gray-400 border-brand-border"
                           }`}>
                           {act.status}
                         </span>
