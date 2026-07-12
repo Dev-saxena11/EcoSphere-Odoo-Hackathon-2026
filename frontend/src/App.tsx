@@ -47,6 +47,7 @@ import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
 import AutomationTab from "./components/AutomationTab";
 import DepartmentCarbonTrackingTab from "./components/DepartmentCarbonTrackingTab";
+import EnvironmentalDashboardTab from "./components/EnvironmentalDashboardTab";
 import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
 import { carbonTransactionsApi } from "./api/carbonTransactions";
 import { environmentalGoalsApi } from "./api/environmentalGoals";
@@ -836,155 +837,11 @@ export default function App() {
           )}
 
           {activeTab === "environmental" && (
-            <div className="space-y-8 animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-bold tracking-tight">Environmental Module</h2>
-                <p className="text-gray-400 text-sm mt-0.5">Automated carbon accounting from logistics, fleets, and facility operations.</p>
-              </div>
-
-              {/* Grid with Logging & Pie */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Stats */}
-                <div className="space-y-6 lg:col-span-2">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="glass-card p-6 rounded-2xl">
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total CO₂e Recorded</p>
-                      <p className="text-3xl font-extrabold text-white mt-2">{formatNumber(totalRecordedCo2e)} kg</p>
-                    </div>
-                    <div className="glass-card p-6 rounded-2xl">
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Active Sustainability Goals</p>
-                      <p className="text-3xl font-extrabold text-white mt-2">{activeGoalCount} Targets</p>
-                    </div>
-                  </div>
-
-                  <div className="glass-card rounded-2xl overflow-hidden">
-                    <div className="p-6 border-b border-brand-border flex items-center justify-between">
-                      <div>
-                        <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400">Sustainability Goal Tracking</h3>
-                        <p className="text-xs text-gray-500 mt-1">Actual emissions are refreshed from confirmed carbon ledger entries.</p>
-                      </div>
-                      <button
-                        onClick={loadEnvironmentalGoals}
-                        className="text-xs bg-slate-900 text-gray-300 border border-brand-border px-3 py-1.5 rounded-lg font-bold hover:text-white hover:bg-slate-800 transition-colors"
-                      >
-                        Refresh
-                      </button>
-                    </div>
-                    <div className="divide-y divide-brand-border">
-                      {environmentalGoals.length === 0 ? (
-                        <div className="p-6 text-sm text-gray-400">
-                          No sustainability goals configured yet.
-                        </div>
-                      ) : (
-                        environmentalGoals.map((goal) => {
-                          const meta = GOAL_STATUS_META[goal.status] || GOAL_STATUS_META.on_track;
-                          const progress = Math.max(0, Math.min(goal.progress_pct, 100));
-                          const timeline = Math.max(0, Math.min(goal.timeline_pct, 100));
-                          return (
-                            <div key={goal.id} className="p-6 space-y-4">
-                              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                <div>
-                                  <h4 className="font-bold text-white">{goal.title}</h4>
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    {formatNumber(goal.current_value)} / {formatNumber(goal.target_value)} {goal.unit} by {goal.deadline}
-                                  </p>
-                                </div>
-                                <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold border ${meta.badge}`}>
-                                  {meta.label}
-                                </span>
-                              </div>
-                              <div>
-                                <div className="mb-2 flex items-center justify-between text-xs font-semibold text-gray-400">
-                                  <span>{formatNumber(progress)}% of target</span>
-                                  <span>{formatNumber(timeline)}% timeline elapsed</span>
-                                </div>
-                                <div className="relative h-3 w-full overflow-hidden rounded-full border border-brand-border bg-slate-950">
-                                  <div className={`h-full rounded-full ${meta.bar}`} style={{ width: `${progress}%` }} />
-                                  <div
-                                    className="absolute top-0 h-full w-px bg-white/70"
-                                    style={{ left: `${timeline}%` }}
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Transactions Table */}
-                  <div className="glass-card rounded-2xl overflow-hidden">
-                    <div className="p-6 border-b border-brand-border flex justify-between items-center">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400">Recent Carbon Ledger</h3>
-                      <button onClick={() => setShowLogModal(true)} className="text-xs bg-emerald-950 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-900 transition-colors">
-                        Add Log
-                      </button>
-                    </div>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-950 text-gray-400 text-xs font-bold uppercase">
-                          <tr>
-                            <th className="p-4">Source Type</th>
-                            <th className="p-4">Quantity</th>
-                            <th className="p-4">CO2e Emissions</th>
-                            <th className="p-4">Reference</th>
-                            <th className="p-4">Date</th>
-                            <th className="p-4 text-right">Method</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-brand-border">
-                          {transactions.map((t) => (
-                            <tr key={t.id} className="hover:bg-slate-900/30 transition-colors">
-                              <td className="p-4 flex items-center gap-2">
-                                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: SOURCE_COLORS[t.source_type] }}></span>
-                                <span className="font-semibold capitalize">{t.source_type}</span>
-                              </td>
-                              <td className="p-4 font-medium">{t.quantity} units</td>
-                              <td className="p-4 font-bold text-rose-400">{t.co2e} kg</td>
-                              <td className="p-4 text-gray-400 text-xs">{t.source_reference || t.notes || "Manual Override"}</td>
-                              <td className="p-4 text-gray-400">{t.transaction_date}</td>
-                              <td className="p-4 text-right">
-                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
-                                  t.created_by === "auto"
-                                    ? "bg-emerald-950/40 text-emerald-400 border-emerald-500/20"
-                                    : "bg-amber-950/40 text-amber-400 border-amber-500/20"
-                                }`}>
-                                  {t.created_by.toUpperCase()}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Source Breakdowns */}
-                <div className="glass-card p-6 rounded-2xl">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-6">Emissions Source Distribution</h3>
-                  <div className="space-y-6">
-                    {MOCK_PIE_DATA.map((entry) => {
-                      const total = MOCK_PIE_DATA.reduce((sum, d) => sum + d.value, 0);
-                      const percent = Math.round((entry.value / total) * 100);
-                      return (
-                        <div key={entry.name}>
-                          <div className="flex justify-between items-center text-xs font-semibold mb-2">
-                            <span className="text-gray-300">{entry.name}</span>
-                            <span className="text-gray-400">{entry.value} kg ({percent}%)</span>
-                          </div>
-                          <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-brand-border">
-                            <div className="h-full rounded-full" style={{ width: `${percent}%`, backgroundColor: entry.color }}></div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <EnvironmentalDashboardTab
+              transactions={transactions}
+              environmentalGoals={environmentalGoals}
+              onRefreshGoals={loadEnvironmentalGoals}
+            />
           )}
 
           {activeTab === "emission_factors" && <EmissionFactorsTab />}
