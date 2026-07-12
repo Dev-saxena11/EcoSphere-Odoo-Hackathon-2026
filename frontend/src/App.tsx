@@ -581,7 +581,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
             <span>audit clarity</span>
           </div>
           <div className="mx-auto mt-20 grid max-w-6xl gap-10 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-            <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-black lowercase leading-[0.9] tracking-normal">
+            <h2 className="text-[clamp(2.2rem,5.5vw,4.5rem)] font-black lowercase leading-[0.9] tracking-normal">
               one place for proof, progress, and people.
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
