@@ -4,14 +4,18 @@ from __future__ import annotations
 from fastapi import FastAPI
 
 import app.models  # noqa: F401  (register models on Base.metadata)
+from app.api.v1.carbon_transactions import router as carbon_transactions_router
 from app.api.v1.categories import router as categories_router
 from app.api.v1.csr_activities import router as csr_activities_router
+from app.api.v1.departments import router as departments_router
 from app.api.v1.emission_factors import router as emission_factors_router
 from app.api.v1.policies import router as policies_router
 
 app = FastAPI(title="EcoSphere API", version="1.0.0")
+app.include_router(carbon_transactions_router, prefix="/api/v1")
 app.include_router(categories_router, prefix="/api/v1")
 app.include_router(csr_activities_router, prefix="/api/v1")
+app.include_router(departments_router, prefix="/api/v1")
 app.include_router(emission_factors_router, prefix="/api/v1")
 app.include_router(policies_router, prefix="/api/v1")
 

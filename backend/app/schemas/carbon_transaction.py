@@ -25,6 +25,23 @@ class CarbonTransactionCreateAuto(BaseModel):
     transaction_date: date
 
 
+class CarbonTransactionCreateManual(BaseModel):
+    """Payload for a user manually logging a transaction (issue #6).
+
+    Unlike the auto-calculation flow, the caller picks a specific emission
+    factor version directly. CO2e is still derived server-side from
+    ``quantity * factor.co2e_per_unit`` — it is never accepted from the client.
+    """
+
+    department_id: int | None = None
+    source_type: SourceType
+    emission_factor_id: int
+    quantity: float = Field(..., gt=0)
+    transaction_date: date
+    source_reference: str | None = Field(None, max_length=255)
+    notes: str | None = Field(None, max_length=512)
+
+
 class CarbonTransactionRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -35,7 +52,9 @@ class CarbonTransactionRead(BaseModel):
     source_reference: str | None
     emission_factor_id: int
     quantity: float
+    factor_value: float
     co2e: float
     transaction_date: date
     created_by: CreatedBy
     status: TransactionStatus
+    notes: str | None
