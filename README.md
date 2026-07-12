@@ -1,260 +1,372 @@
-# EcoSphere 🌱 — ESG Management Platform
+<div align="center">
 
-**EcoSphere** is a full-stack ESG (Environmental, Social, Governance) management platform built for the Odoo Hackathon 2026. It integrates sustainability tracking directly into everyday operations — turning ERP-style transactional data into automated carbon accounting, employee CSR participation, governance compliance, and gamified engagement, all rolled up into live ESG scores.
+# 🌿 EcoSphere
 
-Most ERP systems collect operational data but leave ESG reporting manual and disconnected. EcoSphere closes that gap: emissions are calculated automatically from operational records, employees earn XP and badges for sustainability actions, compliance issues are tracked to resolution, and management gets a real-time weighted ESG score across every department.
+### *Turn Your ERP Into an ESG Engine*
+
+**An enterprise-grade Environmental, Social & Governance platform built for the Odoo Hackathon 2026**
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Deployed on Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+
+</div>
 
 ---
 
-## Core Modules
+## 🚨 The Problem
 
-- 🌍 **Environmental** — Emission factor configuration, automated carbon accounting from operational data, sustainability goals, and department-level carbon tracking
-- 🤝 **Social** — CSR activity management, employee participation tracking with proof-of-completion, and engagement scoring
-- ⚖️ **Governance** — Policy management, employee acknowledgements, audits, and compliance issue tracking with ownership and due dates
-- 🏆 **Gamification** — Challenges with a full lifecycle (Draft → Active → Under Review → Completed), auto-awarded badges, redeemable rewards, and leaderboards
-- 📊 **Reports & Analytics** — Environmental, Social, Governance, and ESG Summary reports with CSV export
+Every modern enterprise sits on a goldmine of operational data — fleet logs, procurement records, energy bills, HR reports. Yet when it comes to ESG reporting, teams are still **copy-pasting numbers into spreadsheets**.
+
+> **The result?** Manual errors, months-old data, zero employee engagement, and compliance audits that cost six figures in consulting fees.
 
 ---
 
-## Tech Stack
+## 💡 Our Solution
 
-| Layer | Technology |
+**EcoSphere** seamlessly plugs into your operational data and transforms it into a living, breathing ESG intelligence layer:
+
+| Without EcoSphere | With EcoSphere |
 |---|---|
-| **Backend** | Python, FastAPI, SQLAlchemy ORM, Alembic, JWT Auth |
-| **Database** | PostgreSQL (SQLite for development) |
-| **Frontend** | React, TypeScript, Vite, Tailwind CSS v3 |
-| **Data Fetching** | TanStack Query |
-| **Forms** | React Hook Form |
-| **Charts** | Recharts |
-| **Storage** | S3-compatible (local filesystem in dev) |
+| Manual spreadsheet-based carbon tracking | ⚡ Auto-calculated CO₂ from operational records |
+| ESG reports compiled once a year | 📊 Real-time ESG scores updated continuously |
+| Zero employee involvement in sustainability | 🏆 Gamified challenges, XP, badges & leaderboards |
+| Compliance policies gathering dust | ✅ Policy acknowledgement tracking with audit trail |
+| Sustainability is a PR exercise | 🌱 Sustainability embedded in daily ERP workflows |
 
 ---
 
-## Project Structure
+## ✨ Feature Showcase
+
+### 🌍 Environmental Module
+- **Emission Factor Engine** — Configure kg CO₂e conversion rates per activity type (fleet, manufacturing, purchased energy, logistics)
+- **Auto Carbon Accounting** — Emissions auto-calculated the moment an operational record is created — no manual entry needed
+- **Department Carbon Heatmap** — Visual comparison of emissions across all departments with trend lines
+- **Sustainability Goals** — Set targets, track progress bars in real-time, get alerted on overruns
+- **Manual Carbon Entry Modal** — Escape hatch for data that lives outside your ERP
+
+### 🤝 Social Module
+- **CSR Activity Board** — Create, publish, and manage company sustainability events
+- **Employee Participation Tracking** — Staff join activities, upload proof, and managers approve
+- **Engagement Scoring** — Department-level social participation scores feed directly into the ESG index
+
+### ⚖️ Governance Module
+- **ESG Policy Library** — Draft, activate, archive policies with version control
+- **Policy Acknowledgement Tracking** — Every employee's sign-off is timestamped and auditable
+- **Compliance Issues Board** — Severity-tagged violations with assigned owners, due dates, and overdue highlighting
+- **Audit Log** — Full immutable trail of governance actions
+
+### 🏆 Gamification Engine
+- **Challenge Lifecycle** — Draft → Active → Under Review → Completed with XP rewards per challenge
+- **Badge System** — Auto-unlocked based on XP thresholds and specific behavioral triggers
+- **Reward Catalog** — Stock-limited rewards redeemable with XP (automatically deducted)
+- **Live Leaderboard** — Department and individual rankings to spark healthy competition
+- **XP Economy** — Every sustainable action (CSR participation, policy acknowledgement, challenge completion) earns XP
+
+### 📊 Dashboard & Analytics
+- **ESG Score KPI Cards** — Environmental / Social / Governance / Total with configurable weightings
+- **Carbon Trend Chart** — Month-over-month emissions vs. target area chart
+- **Department Ranking Chart** — Bar chart comparison across all departments
+- **Automation Engine** — Scheduled triggers for recurring emission calculations
+
+---
+
+## 🏗️ Architecture
 
 ```
-EcoSphere-Odoo-Hackathon-2026/
-├── backend/                        # FastAPI application
+┌─────────────────────────────────────────────────────────┐
+│                      FRONTEND                           │
+│   React 18 · TypeScript · Vite · Tailwind CSS v3        │
+│   Recharts · Lucide Icons · React Router v6             │
+└──────────────────────┬──────────────────────────────────┘
+                       │  REST API (JSON)
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                      BACKEND                            │
+│            FastAPI 0.115 · Python 3.12                  │
+│                                                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐              │
+│  │  Router  │→ │ Service  │→ │   Repo   │              │
+│  │  Layer   │  │  Layer   │  │  Layer   │              │
+│  └──────────┘  └──────────┘  └──────────┘              │
+│       JWT Auth · Pydantic v2 · Alembic Migrations       │
+└──────────────────────┬──────────────────────────────────┘
+                       │  SQLAlchemy ORM
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                    DATABASE                             │
+│          PostgreSQL (prod) · SQLite (dev)               │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🧮 ESG Score Formula
+
+```
+Department ESG Score = (Environmental × 0.40) + (Social × 0.30) + (Governance × 0.30)
+
+Organisation Score   = Σ(Department Scores) / Total Departments
+```
+
+> **Weights are fully configurable** via the Settings panel — no code changes required.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Why We Chose It |
+|---|---|---|
+| **Backend Framework** | FastAPI 0.115 | Async-first, auto-generated OpenAPI docs, blazing fast |
+| **ORM & Migrations** | SQLAlchemy 2.0 + Alembic | Type-safe queries, zero-downtime schema changes |
+| **Auth** | JWT (python-jose + passlib/bcrypt) | Stateless, scalable, industry standard |
+| **Validation** | Pydantic v2 | Runtime type safety across all API boundaries |
+| **Database** | PostgreSQL / SQLite | Production-grade relational storage |
+| **Frontend Framework** | React 18 + TypeScript 5 | Component model, strict typing, huge ecosystem |
+| **Build Tool** | Vite 5 | Sub-second HMR, ESM-native, optimised bundles |
+| **Styling** | Tailwind CSS v3 | Utility-first, dark-mode-first, zero runtime |
+| **Charts** | Recharts 2 | Composable SVG charts with React integration |
+| **Icons** | Lucide React | Consistent, tree-shakable icon set |
+| **Frontend Deployment** | Vercel | Global CDN, instant deployments, zero config |
+| **Backend Deployment** | Render | Managed containers, auto-deploy from Git |
+
+---
+
+## 📁 Project Structure
+
+```
+EcoSphere/
+├── backend/                         # FastAPI application
 │   ├── app/
-│   │   ├── api/v1/                 # Route handlers (one file per resource)
-│   │   ├── core/                   # Config, security, database, dependencies
-│   │   ├── models/                 # SQLAlchemy ORM models
-│   │   ├── schemas/                # Pydantic v2 request/response schemas
-│   │   ├── services/               # Business logic layer
-│   │   ├── repositories/           # Data access layer (repository pattern)
-│   │   └── main.py                 # FastAPI entry point
-│   ├── alembic/                    # Database migrations
-│   ├── seed.py                     # Demo data seeder
+│   │   ├── api/v1/                  # Route handlers (one file per resource)
+│   │   │   ├── auth.py              # JWT login & token refresh
+│   │   │   ├── carbon_transactions.py
+│   │   │   ├── emission_factors.py
+│   │   │   ├── csr_activities.py
+│   │   │   ├── policies.py
+│   │   │   ├── gamification.py
+│   │   │   └── auto_calculation.py  # Automated emission triggers
+│   │   ├── core/                    # Config, security, database, DI
+│   │   ├── models/                  # SQLAlchemy ORM models
+│   │   ├── schemas/                 # Pydantic v2 request/response schemas
+│   │   ├── services/                # Business logic (carbon, scoring, gamification)
+│   │   ├── repositories/            # Data access layer
+│   │   └── main.py                  # FastAPI app entry point
+│   ├── alembic/                     # Database migrations
+│   ├── seed.py                      # Rich demo data seeder (~32KB of realistic data)
 │   ├── requirements.txt
 │   └── .env.example
 │
-└── frontend/                       # React + Vite application
+└── frontend/                        # React + Vite SPA
     ├── src/
-    │   ├── api/                    # TanStack Query hooks per feature
-    │   ├── components/             # Shared UI components
-    │   ├── features/
-    │   │   ├── auth/               # Login, token management
-    │   │   ├── dashboard/          # KPI cards, charts, quick actions
-    │   │   ├── environmental/      # Emission factors, carbon transactions, goals
-    │   │   ├── social/             # CSR activities, participations
-    │   │   ├── governance/         # Policies, audits, compliance issues
-    │   │   ├── gamification/       # Challenges, badges, rewards, leaderboard
-    │   │   ├── reports/            # Report builder, exports
-    │   │   └── settings/           # Users, departments, ESG weights
-    │   ├── layouts/                # App shell, sidebar, top nav
-    │   ├── types/                  # Shared TypeScript types
-    │   └── main.tsx
-    ├── tailwind.config.ts
+    │   ├── App.tsx                  # Root component with tab routing
+    │   ├── components/              # Feature UI components
+    │   │   ├── GamificationTab.tsx
+    │   │   ├── GovernanceTab.tsx
+    │   │   ├── EmissionFactorsTab.tsx
+    │   │   ├── AutomationTab.tsx
+    │   │   ├── DepartmentCarbonTrackingTab.tsx
+    │   │   └── ManualCarbonEntryModal.tsx
+    │   ├── features/auth/           # Login, token management, auth screen
+    │   ├── api/                     # API client functions
+    │   ├── types/                   # Shared TypeScript interfaces
+    │   └── main.tsx                 # React entry point
+    ├── public/resources/            # Static assets (audio, images)
+    ├── tailwind.config.js
+    ├── vite.config.ts
     └── package.json
 ```
 
 ---
 
-## Backend – Key Components
-
-### Models (SQLAlchemy)
+## 🗄️ Data Models
 
 | Model | Description |
 |---|---|
-| `User`, `Role` | Auth and RBAC |
-| `Department` | Org hierarchy |
-| `Category` | Reusable tags for CSR / challenges |
-| `EmissionFactor` | Carbon conversion values (kg CO₂e per unit) |
-| `CarbonTransaction` | Auto-calculated emissions from ERP operations |
-| `EnvironmentalGoal` | Sustainability targets with progress tracking |
-| `ProductESGProfile` | ESG metadata per product |
-| `CSRActivity` | Company CSR events |
+| `User` / `Role` | Auth, RBAC, XP points, level |
+| `Department` | Org hierarchy with head assignment |
+| `EmissionFactor` | CO₂e conversion rates per activity type |
+| `EmissionFactorMapping` | Maps ERP record types to emission factors |
+| `CarbonTransaction` | Auto-calculated emissions with source tracing |
+| `EnvironmentalGoal` | Sustainability targets with progress |
+| `CSRActivity` | Company sustainability events |
 | `EmployeeParticipation` | CSR participation with proof & approval |
-| `ESGPolicy`, `PolicyAcknowledgement` | Governance policies and employee sign-offs |
-| `Audit`, `ComplianceIssue` | Audit findings and violation tracking |
-| `Challenge`, `ChallengeParticipation` | Gamified sustainability challenges |
-| `Badge`, `UserBadge` | Auto-awarded achievement badges |
-| `Reward`, `RewardRedemption` | Redeemable rewards with XP deduction |
-| `DepartmentScore` | Computed ESG scores per department |
-| `Notification` | In-app notification records |
+| `ESGPolicy` / `PolicyAcknowledgement` | Governance policies & employee sign-offs |
+| `Audit` / `ComplianceIssue` | Audit findings, violations, severity, owner |
+| `Challenge` / `ChallengeParticipation` | Gamified sustainability challenges |
+| `Badge` / `UserBadge` | Auto-awarded achievement badges |
+| `Reward` / `RewardRedemption` | Redeemable rewards with XP economy |
+| `DepartmentScore` | Computed, weighted ESG scores per department |
+| `Notification` | In-app event notifications |
 
-### Services
+---
 
-| Service | Responsibility |
+## 🔐 User Roles
+
+| Role | Access Level |
 |---|---|
-| `carbon_service` | Auto-calculate CO₂ from quantity × emission factor |
-| `score_service` | Weighted ESG score: Env 40% + Social 30% + Gov 30% |
-| `gamification_service` | XP award, badge unlock checks, reward redemption |
-| `notification_service` | Create in-app notifications on key events |
-| `report_service` | Aggregate data for report generation and CSV export |
-
-### API Routes (`/api/v1/`)
-
-`auth` · `users` · `departments` · `categories` · `emission-factors` · `carbon-transactions` · `environmental-goals` · `csr-activities` · `employee-participations` · `policies` · `policy-acknowledgements` · `audits` · `compliance-issues` · `challenges` · `challenge-participations` · `badges` · `rewards` · `department-scores` · `notifications` · `dashboard` · `reports`
+| 🔴 **System Admin** | Full platform access — configure everything |
+| 🟠 **ESG Manager** | Manage all ESG modules, run reports, configure weights |
+| 🟡 **Department Manager** | Manage department activities, view own scores |
+| 🟢 **Employee** | Join challenges, CSR activities, earn XP & badges |
+| 🔵 **Auditor** | Conduct audits, log compliance issues, read-only elsewhere |
 
 ---
 
-## Frontend – Feature Modules
+## 🚀 Getting Started
 
-### Dashboard
-- ESG Score KPI cards (Environmental / Social / Governance / Total)
-- Carbon Trend line chart
-- Department ESG Ranking bar chart
-- Quick Actions panel
-- Live data from aggregated dashboard endpoint
+### Prerequisites
 
-### Environmental
-- Emission Factors list + CRUD
-- Carbon Transactions table with department/date filters
-- Product ESG Profiles
-- Environmental Goals with progress bars
-- Department carbon heatmap
+- Python 3.12+
+- Node.js 20+
+- PostgreSQL (or use SQLite for local dev)
 
-### Social
-- CSR Activities management (create, view, manage participation)
-- Employee Participation with proof upload and approval workflow
-- Engagement scoring per department
-
-### Governance
-- ESG Policies with status badges
-- Policy Acknowledgements tracking per employee
-- Audits with findings log
-- Compliance Issues with severity, owner, due date — overdue items highlighted
-
-### Gamification
-- Challenges board grouped by lifecycle state (Draft / Active / Under Review / Completed)
-- Leaderboard table sorted by XP
-- Badge gallery with unlock rules
-- Reward catalog with one-click redemption (XP deducted automatically)
-
-### Reports
-- Pre-built report cards: Environmental, Social, Governance, ESG Summary
-- Custom Report Builder with filters (department, date range, employee, module)
-- CSV export
-
-### Settings
-- User management + role assignment
-- Department configuration
-- ESG weight configuration (Environmental / Social / Governance %)
-- Notification preferences
-
----
-
-## ESG Score Formula
-
-```
-Department Score = (Environmental × 0.40) + (Social × 0.30) + (Governance × 0.30)
-Organization Score = Average of all Department Scores
-```
-
-> Weights are configurable via Settings.
-
----
-
-## Gamification Rules
-
-| Action | Reward |
-|---|---|
-| Complete a Challenge | XP defined per challenge |
-| Participate in CSR Activity | Fixed XP on approval |
-| Acknowledge ESG Policy | Compliance XP |
-| Submit proof for sustainability activity | Bonus XP |
-
-XP thresholds auto-unlock **Badges**. Accumulated XP can be redeemed for **Rewards** (stock-limited). Redemption deducts XP automatically.
-
----
-
-## User Roles
-
-| Role | Access |
-|---|---|
-| **System Admin** | Full access — configure everything |
-| **ESG Manager** | Manage all ESG modules and reports |
-| **Department Manager** | Manage department activities and view scores |
-| **Employee** | Join challenges, CSR activities, earn XP |
-| **Auditor** | Perform audits and compliance reviews |
-
----
-
-## Development Phases
-
-| Phase | Scope | Status |
-|---|---|---|
-| 1 | Authentication, Users, Departments, Categories | 🟡 Partial/Stubbed |
-| 2 | Environmental Module, Carbon Calculations, Goals | 🟡 Partial/Stubbed |
-| 3 | Social Module, CSR, Employee Participation | 🟡 Partial/Stubbed |
-| 4 | Governance Module, Policies, Audits, Compliance | ✅ Completed (UI) |
-| 5 | Gamification (Challenges, Badges, Rewards, Leaderboard) | ✅ Completed |
-| 6 | Dashboard (Live KPIs, Charts, Rankings) | ✅ Completed |
-| 7 | Reports & Analytics (Pre-built + Custom Builder) | 🔲 Planned |
-| 8 | Notifications (In-App + Email) | 🔲 Planned |
-| 9 | Optimization, Testing, CI/CD Deployment (Vercel/Render) | ✅ Completed |
-
----
-
-## Getting Started
-
-### Backend
+### Backend Setup
 
 ```bash
 cd backend
+
+# Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
-cp .env.example .env            # Configure your database URL and secret key
-alembic upgrade head            # Run migrations
-python seed.py                  # Load demo data
-uvicorn app.main:app --reload   # Start API server → http://localhost:8000
+
+# Configure environment
+cp .env.example .env
+# Edit .env: set DATABASE_URL and SECRET_KEY
+
+# Run database migrations
+alembic upgrade head
+
+# Seed with realistic demo data
+python seed.py
+
+# Start the API server
+uvicorn app.main:app --reload
+# → API live at http://localhost:8000
+# → Swagger UI at http://localhost:8000/docs
 ```
 
-### Frontend
+### Frontend Setup
 
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
-npm run dev                     # Start dev server → http://localhost:5173
+
+# Start the dev server
+npm run dev
+# → App live at http://localhost:5173
 ```
 
-### API Docs
+### Environment Variables
 
-Interactive Swagger UI available at: `http://localhost:8000/docs`
-
----
-
-## Non-Functional Requirements
-
-- ✅ Responsive, dark-themed enterprise UI
-- ✅ Role-Based Access Control (RBAC)
-- ✅ Clean Architecture — Repository → Service → API separation
-- ✅ Type-safe API contracts via Pydantic v2
-- ✅ Database migrations with Alembic (zero-downtime schema changes)
-- ✅ Audit logging on key entities
-- ✅ Modular, extensible feature structure
+```env
+# backend/.env
+DATABASE_URL=postgresql://user:password@localhost/ecosphere
+SECRET_KEY=your-super-secret-key-here
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+```
 
 ---
 
-## Future Enhancements
+## 📡 API Reference
 
-- 🤖 AI Sustainability Recommendations
-- 📈 Predictive Carbon Analytics
-- 📱 Mobile Application
-- 🔌 IoT Integration
-- 🔗 ERP Connectors (Odoo, SAP)
-- 💬 Microsoft Teams / Slack Integration
-- 📊 Power BI Connector
-- 🏅 ESG Benchmarking against industry standards
+All routes are prefixed with `/api/v1/`. Interactive docs available at `/docs`.
+
+| Resource | Endpoints |
+|---|---|
+| `auth` | POST /login, POST /refresh |
+| `users` | CRUD + role assignment |
+| `departments` | CRUD |
+| `emission-factors` | CRUD + bulk import |
+| `emission-factor-mappings` | Map ERP types to factors |
+| `carbon-transactions` | CRUD + filters by dept/date/source |
+| `auto-calculation` | Trigger automated emission computation |
+| `csr-activities` | CRUD + participation management |
+| `policies` | CRUD + acknowledgement tracking |
+| `gamification` | Challenges, badges, rewards, leaderboard |
+| `settings` | ESG weights, notification preferences |
+
+---
+
+## 🏆 Gamification Rules
+
+| Action | XP Reward |
+|---|---|
+| ✅ Complete a sustainability challenge | Configurable per challenge |
+| 🌳 Participate in a CSR activity | Fixed XP on manager approval |
+| 📜 Acknowledge an ESG policy | Compliance XP bonus |
+| 📸 Submit proof for a sustainability activity | Evidence bonus XP |
+| 🥇 Reach the top of the leaderboard | Badge unlock |
+
+XP accumulates → **Badges auto-unlock** at defined thresholds → XP can be **redeemed for Rewards** (stock-limited, XP deducted on redemption).
+
+---
+
+## ✅ Quality & Architecture Highlights
+
+- ✅ **Clean Architecture** — Repository → Service → API router separation
+- ✅ **Type-safe API contracts** — Pydantic v2 schemas on every endpoint
+- ✅ **Database migrations** — Alembic with zero-downtime schema changes
+- ✅ **Role-Based Access Control** — JWT + role middleware
+- ✅ **Audit logging** — Immutable trail on key entities
+- ✅ **Responsive dark-themed UI** — Enterprise-grade design system
+- ✅ **Startup audio feedback** — Immersive UX with autoplay + interaction fallback
+- ✅ **Modular feature structure** — Each domain is independently extensible
+- ✅ **Demo data seeder** — 32KB of realistic seeded data for instant demos
+
+---
+
+## 🌐 Deployment
+
+| Service | Platform | Configuration |
+|---|---|---|
+| **Backend API** | Render (Web Service) | `render.yaml` at repo root |
+| **Frontend SPA** | Vercel | `vercel.json` in `frontend/` |
+| **Database** | Render PostgreSQL / Supabase | `DATABASE_URL` env variable |
+
+```yaml
+# render.yaml (included in repo)
+services:
+  - type: web
+    name: ecosphere-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+---
+
+## 🔮 Roadmap
+
+| Feature | Status |
+|---|---|
+| 🤖 AI Sustainability Recommendations (Gemini API) | 🗺️ Planned |
+| 📈 Predictive Carbon Analytics (time-series ML) | 🗺️ Planned |
+| 📱 React Native Mobile App | 🗺️ Planned |
+| 🔌 IoT Sensor Integration | 🗺️ Planned |
+| 🔗 Native Odoo ERP Connector | 🗺️ Planned |
+| 📊 Power BI / Looker Connector | 🗺️ Planned |
+| 💬 Slack / Microsoft Teams Integration | 🗺️ Planned |
+| 🏅 ESG Benchmarking vs. Industry Standards | 🗺️ Planned |
+| 📧 Email & Push Notifications | 🗺️ Planned |
+| 📋 GRI / SASB / TCFD Report Templates | 🗺️ Planned |
+
+---
+
+<div align="center">
+
+*"The greatest threat to our planet is the belief that someone else will save it."*  
+*— Robert Swan*
+
+**EcoSphere** — Because sustainability shouldn't be an afterthought.
+
+</div>
