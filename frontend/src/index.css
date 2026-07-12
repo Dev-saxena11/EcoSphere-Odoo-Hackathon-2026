@@ -197,7 +197,6 @@
 .light-theme ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-
 /* Slate Button Overrides for Light Mode */
 .light-theme button.bg-slate-900,
 .light-theme button.bg-slate-950,
