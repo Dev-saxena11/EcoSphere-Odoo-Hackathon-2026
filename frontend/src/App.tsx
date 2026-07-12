@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Leaf,
@@ -21,7 +21,8 @@ import {
   DollarSign,
   Briefcase,
   FileCheck,
-  Zap
+  Zap,
+  ArrowUpRight
 } from "lucide-react";
 import {
   AreaChart,
@@ -41,6 +42,8 @@ import {
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
+import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
+import { carbonTransactionsApi } from "./api/carbonTransactions";
 // TypeScript types from local types file
 import {
   User,
@@ -93,60 +96,6 @@ const MOCK_PIE_DATA = [
   { name: "Manufacturing", value: 2400, color: SOURCE_COLORS.manufacturing },
   { name: "Purchase Energy", value: 950, color: SOURCE_COLORS.purchase },
   { name: "Logistical Expenses", value: 600, color: SOURCE_COLORS.expense }
-];
-
-const MOCK_TRANSACTIONS: CarbonTransaction[] = [
-  {
-    id: 1,
-    source_type: "fleet",
-    emission_factor_id: 1,
-    quantity: 120,
-    co2e: 324.5,
-    factor_value: 2.7,
-    transaction_date: "2026-07-10",
-    created_by: "auto",
-    status: "confirmed",
-    source_reference: "FLEET/TRIP/1042",
-    notes: "Delivery trip Mumbai-Pune"
-  },
-  {
-    id: 2,
-    source_type: "manufacturing",
-    emission_factor_id: 1,
-    quantity: 500,
-    co2e: 1250.0,
-    factor_value: 2.5,
-    transaction_date: "2026-07-09",
-    created_by: "auto",
-    status: "confirmed",
-    source_reference: "MFG/BATCH/304",
-    notes: "Assembly line A shift"
-  },
-  {
-    id: 3,
-    source_type: "purchase",
-    emission_factor_id: 1,
-    quantity: 4500,
-    co2e: 3825.0,
-    factor_value: 0.85,
-    transaction_date: "2026-07-01",
-    created_by: "auto",
-    status: "confirmed",
-    source_reference: "UTIL/ELEC/Q2",
-    notes: "Grid electricity Q2 main facility"
-  },
-  {
-    id: 4,
-    source_type: "expense",
-    emission_factor_id: 1,
-    quantity: 45,
-    co2e: 98.4,
-    factor_value: 2.18,
-    transaction_date: "2026-07-08",
-    created_by: "manual",
-    status: "confirmed",
-    notes: "Flights expense audit"
-  }
 ];
 
 const MOCK_CSR_ACTIVITIES: CSRActivity[] = [
@@ -258,62 +207,221 @@ const MOCK_ISSUES: ComplianceIssue[] = [
   }
 ];
 
+function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
+  const pillars = [
+    {
+      number: "1.",
+      title: "carbon intelligence",
+      codename: "/ live ledger /",
+      body: "turns fleet, energy, expense, and manufacturing activity into a trusted emissions trail.",
+      icon: Leaf
+    },
+    {
+      number: "2.",
+      title: "social momentum",
+      codename: "/ participation graph /",
+      body: "connects people to CSR work, evidence, points, and team-level accountability.",
+      icon: Users
+    },
+    {
+      number: "3.",
+      title: "governance memory",
+      codename: "/ policy mesh /",
+      body: "keeps policies, acknowledgements, risk issues, and audit signals moving together.",
+      icon: Scale
+    }
+  ];
+
+  const proofPoints = [
+    "5,497.9 kg co2e recorded",
+    "3 active policies",
+    "4 departments scored",
+    "2 reduction goals"
+  ];
+
+  return (
+    <div className="landing-paper min-h-screen overflow-hidden bg-[#ede8d7] text-[#11110f]">
+      <header className="fixed left-0 right-0 top-6 z-50 px-4">
+        <nav className="mx-auto flex max-w-5xl items-center justify-between rounded-full border border-black/15 bg-[#f3eedf]/80 px-4 py-2 shadow-[0_12px_40px_rgba(20,18,12,0.12)] backdrop-blur-xl">
+          <a href="#top" className="flex items-center gap-2 rounded-full px-3 py-2 text-xl font-black tracking-tight">
+            <Leaf className="h-6 w-6 fill-[#11110f] stroke-[#11110f]" />
+            <span>ecosphere</span>
+          </a>
+
+          <div className="hidden items-center gap-7 text-sm font-medium lowercase md:flex">
+            <a href="#system" className="hover:text-[#53652c]">system</a>
+            <a href="#modules" className="hover:text-[#53652c]">modules</a>
+            <a href="#impact" className="hover:text-[#53652c]">impact</a>
+            <button onClick={onEnterDashboard} className="hover:text-[#53652c]">dashboard</button>
+          </div>
+
+          <button
+            onClick={onEnterDashboard}
+            className="inline-flex items-center gap-2 rounded-full bg-[#11110f] px-5 py-3 text-sm font-bold lowercase text-[#f6f0df] transition hover:bg-[#53652c]"
+          >
+            open app
+            <ArrowUpRight className="h-4 w-4" />
+          </button>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section className="relative flex min-h-[92vh] items-end overflow-hidden px-4 pb-12 pt-32 md:pb-16">
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src="/resources/ecosphere-hero.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-[#ede8d7]/35 mix-blend-screen" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(237,232,215,0.05),rgba(17,17,15,0.62))]" />
+
+          <div className="relative z-10 mx-auto grid w-full max-w-6xl gap-10 text-[#f8f2df] lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+            <div>
+              <p className="mb-5 max-w-xl text-sm font-semibold lowercase tracking-[0.24em] text-[#d7e2b6]">
+                esg operating system for odoo
+              </p>
+              <h1 className="max-w-5xl text-[clamp(4rem,12vw,10.5rem)] font-black lowercase leading-[0.82] tracking-normal">
+                ecosphere
+              </h1>
+              <p className="mt-8 max-w-2xl text-[clamp(1.25rem,2.4vw,2.35rem)] font-semibold lowercase leading-tight">
+                turns environmental, social, and governance work into one living enterprise record.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-5 lg:items-end">
+              <div className="max-w-md text-base font-medium lowercase leading-relaxed text-[#f0ead7]">
+                built for teams that need carbon accounting, policy acknowledgement, csr engagement, and reward loops without leaving their operational flow.
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {proofPoints.map((point) => (
+                  <span key={point} className="rounded-full border border-[#f8f2df]/35 bg-[#11110f]/35 px-4 py-2 text-xs font-bold lowercase backdrop-blur-md">
+                    {point}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="system" className="px-4 py-24 md:py-32">
+          <div className="mx-auto max-w-6xl">
+            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+              we are building an esg command layer
+            </p>
+            <h2 className="max-w-5xl text-[clamp(3rem,8vw,8.5rem)] font-black lowercase leading-[0.88] tracking-normal">
+              making sustainability data feel alive.
+            </h2>
+            <button
+              onClick={onEnterDashboard}
+              className="mt-10 inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#11110f] px-6 py-4 text-sm font-black lowercase text-[#f6f0df] transition hover:bg-[#53652c]"
+            >
+              launch dashboard
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
+        </section>
+
+        <section id="modules" className="px-4 py-20">
+          <div className="mx-auto max-w-6xl">
+            <p className="mb-8 text-sm font-bold lowercase tracking-[0.28em] text-[#53652c]">
+              this requires mastering 3 essentials:
+            </p>
+            <div className="grid gap-5 lg:grid-cols-3">
+              {pillars.map((pillar) => {
+                const Icon = pillar.icon;
+                return (
+                  <article key={pillar.title} className="min-h-[25rem] border-t border-black/20 py-8">
+                    <div className="mb-12 flex items-center justify-between">
+                      <span className="text-4xl font-black lowercase">{pillar.number}</span>
+                      <span className="rounded-full border border-black/15 bg-[#f6f0df]/70 p-3">
+                        <Icon className="h-6 w-6" />
+                      </span>
+                    </div>
+                    <h3 className="text-4xl font-black lowercase leading-none">{pillar.title}</h3>
+                    <p className="mt-3 text-sm font-bold lowercase text-[#53652c]">{pillar.codename}</p>
+                    <p className="mt-8 text-xl font-semibold lowercase leading-snug text-[#2e3027]">{pillar.body}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section id="impact" className="overflow-hidden py-24">
+          <div className="landing-marquee flex min-w-max gap-5 text-[clamp(3rem,8vw,8rem)] font-black lowercase leading-none text-[#11110f]">
+            <span>carbon ledger</span>
+            <span>policy memory</span>
+            <span>csr motion</span>
+            <span>team rewards</span>
+            <span>audit clarity</span>
+          </div>
+          <div className="mx-auto mt-20 grid max-w-6xl gap-10 px-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+            <h2 className="text-[clamp(2.7rem,7vw,7rem)] font-black lowercase leading-[0.9] tracking-normal">
+              one place for proof, progress, and people.
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ["environmental", "automated emission factors, manual logs, and source distribution."],
+                ["social", "csr activity registration, evidence requirements, and xp incentives."],
+                ["governance", "policy acknowledgement, issue severity, and compliance score."],
+                ["gamification", "levels, challenges, badges, and department scoreboards."]
+              ].map(([title, body]) => (
+                <div key={title} className="border-t border-black/20 pt-5">
+                  <p className="text-lg font-black lowercase">{title}</p>
+                  <p className="mt-3 text-sm font-semibold lowercase leading-relaxed text-[#444638]">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <footer className="bg-[#10100e] px-4 py-14 text-[#f6f0df]">
+          <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-bold lowercase tracking-[0.28em] text-[#b8c886]">ecosphere</p>
+              <h2 className="mt-4 max-w-3xl text-5xl font-black lowercase leading-none md:text-7xl">
+                open the operating view.
+              </h2>
+            </div>
+            <button
+              onClick={onEnterDashboard}
+              className="inline-flex w-fit items-center gap-2 rounded-full bg-[#f6f0df] px-6 py-4 text-sm font-black lowercase text-[#10100e] transition hover:bg-[#b8c886]"
+            >
+              enter dashboard
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
 
 export default function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
   const [user, setUser] = useState<User>(MOCK_USER);
-  const [transactions, setTransactions] = useState<CarbonTransaction[]>(MOCK_TRANSACTIONS);
+  const [transactions, setTransactions] = useState<CarbonTransaction[]>([]);
   const [csrActivities, setCsrActivities] = useState<CSRActivity[]>(MOCK_CSR_ACTIVITIES);
   const [policies, setPolicies] = useState<ESGPolicy[]>(MOCK_POLICIES);
   const [issues, setIssues] = useState<ComplianceIssue[]>(MOCK_ISSUES);
-  
+
   // States for interactive modals / logging
   const [showLogModal, setShowLogModal] = useState(false);
-  const [logType, setLogType] = useState<SourceType>("fleet");
-  const [logQuantity, setLogQuantity] = useState("");
-  const [logNotes, setLogNotes] = useState("");
-  
+
   const [acknowledgedPolicies, setAcknowledgedPolicies] = useState<Record<number, boolean>>({});
 
-  const handleLogEmissions = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!logQuantity || isNaN(Number(logQuantity))) return;
-
-    const quantity = Number(logQuantity);
-    let factor = 1.0;
-    if (logType === "fleet") factor = 2.7;
-    else if (logType === "manufacturing") factor = 2.5;
-    else if (logType === "purchase") factor = 0.85;
-    else factor = 2.18;
-
-    const co2e = Number((quantity * factor).toFixed(2));
-
-    const newTxn: CarbonTransaction = {
-      id: transactions.length + 1,
-      source_type: logType,
-    emission_factor_id: 1,
-      quantity,
-      co2e,
-      factor_value: factor,
-      transaction_date: new Date().toISOString().split("T")[0],
-      created_by: "manual",
-      status: "confirmed",
-      notes: logNotes
-    };
-
-    setTransactions([newTxn, ...transactions]);
-    
-    // Add XP to user for manual reporting
-    setUser({
-      ...user,
-      xp_points: user.xp_points + 50
-    });
-
-    // Reset Form
-    setLogQuantity("");
-    setLogNotes("");
-    setShowLogModal(false);
-  };
+  useEffect(() => {
+    carbonTransactionsApi
+      .list()
+      .then(setTransactions)
+      .catch((err) => console.error("Failed to load carbon transactions", err));
+  }, []);
 
   const handlePolicyAck = (id: number) => {
     setAcknowledgedPolicies((prev) => ({ ...prev, [id]: true }));
@@ -328,6 +436,10 @@ export default function App() {
   const activeCount = activePolicies.length;
   // Score = (acknowledged / total) * 100, capped at 100. Show 0 when no active policies.
   const gScore = activeCount > 0 ? Math.round((ackedCount / activeCount) * 1000) / 10 : 0;
+
+  if (showLanding) {
+    return <LandingPage onEnterDashboard={() => setShowLanding(false)} />;
+  }
 
   return (
     <div className="flex min-h-screen bg-brand-dark">
@@ -790,77 +902,10 @@ export default function App() {
 
       {/* --- CARBON LOGGER MODAL --- */}
       {showLogModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass-card w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-scale-up">
-            <div className="p-6 border-b border-brand-border flex justify-between items-center bg-slate-950/60">
-              <h3 className="font-bold text-lg flex items-center gap-2">
-                <Leaf className="w-5 h-5 text-emerald-400" />
-                <span>Log Carbon Transaction</span>
-              </h3>
-              <button onClick={() => setShowLogModal(false)} className="text-gray-400 hover:text-white text-lg font-bold">
-                &times;
-              </button>
-            </div>
-
-            <form onSubmit={handleLogEmissions} className="p-6 space-y-4">
-              {/* Source Type Selector */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Source Type</label>
-                <select
-                  value={logType}
-                  onChange={(e) => setLogType(e.target.value as any)}
-                  className="w-full bg-slate-900 border border-brand-border px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-emerald-500/50"
-                >
-                  <option value="fleet">Fleet Vehicles (liters)</option>
-                  <option value="manufacturing">Manufacturing (kW/h)</option>
-                  <option value="purchase">Grid Electricity (MW/h)</option>
-                  <option value="expense">Corporate Expense (USD)</option>
-                </select>
-              </div>
-
-              {/* Quantity */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Quantity</label>
-                <input
-                  type="number"
-                  placeholder="e.g. 150"
-                  value={logQuantity}
-                  onChange={(e) => setLogQuantity(e.target.value)}
-                  className="w-full bg-slate-900 border border-brand-border px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-emerald-500/50"
-                  required
-                />
-              </div>
-
-              {/* Notes */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Notes / Reference</label>
-                <textarea
-                  placeholder="e.g. Fleet logistics record code or description"
-                  value={logNotes}
-                  onChange={(e) => setLogNotes(e.target.value)}
-                  rows={3}
-                  className="w-full bg-slate-900 border border-brand-border px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-emerald-500/50 resize-none"
-                />
-              </div>
-
-              <div className="pt-4 flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setShowLogModal(false)}
-                  className="flex-1 bg-slate-900 border border-brand-border text-gray-400 py-2.5 rounded-xl text-sm font-semibold hover:text-white hover:bg-slate-800 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-gradient-emerald text-white py-2.5 rounded-xl text-sm font-semibold hover:shadow-emerald-950/20 hover:shadow-lg transition-all"
-                >
-                  Submit Log
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ManualCarbonEntryModal
+          onClose={() => setShowLogModal(false)}
+          onCreated={(transaction) => setTransactions((prev) => [transaction, ...prev])}
+        />
       )}
     </div>
   );
