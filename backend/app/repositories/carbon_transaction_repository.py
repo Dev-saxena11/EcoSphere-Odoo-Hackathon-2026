@@ -6,7 +6,12 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from app.models.carbon_transaction import CarbonTransaction, SourceType, TransactionStatus
+from app.models.carbon_transaction import (
+    CarbonTransaction,
+    CreatedBy,
+    SourceType,
+    TransactionStatus,
+)
 
 
 class CarbonTransactionRepository:
@@ -39,6 +44,24 @@ class CarbonTransactionRepository:
 
     def get(self, transaction_id: int) -> Optional[CarbonTransaction]:
         return self.db.get(CarbonTransaction, transaction_id)
+
+    def find_auto_by_source(
+        self, source_type: SourceType, source_record_id: int
+    ) -> Optional[CarbonTransaction]:
+        """Return the auto-created transaction for a source record, if any.
+
+        Used by the auto emission engine to avoid creating duplicate
+        transactions when a source record is re-ingested after an edit.
+        """
+        return (
+            self.db.query(CarbonTransaction)
+            .filter(
+                CarbonTransaction.created_by == CreatedBy.AUTO,
+                CarbonTransaction.source_type == source_type,
+                CarbonTransaction.source_record_id == source_record_id,
+            )
+            .one_or_none()
+        )
 
     def create(self, transaction: CarbonTransaction) -> CarbonTransaction:
         self.db.add(transaction)

@@ -70,6 +70,32 @@ export interface CarbonTransaction {
   notes?: string;
 }
 
+// ── Auto emission calculation engine (issue #7) ────────────────────────────
+export interface EmissionFactorMapping {
+  id: number;
+  source_type: SourceType;
+  match_key: string;
+  factor_code: string;
+  is_active: boolean;
+  created_at: string;
+}
+
+export type PendingStatus = "pending" | "resolved" | "dismissed";
+
+export interface PendingAutoCalculation {
+  id: number;
+  source_type: SourceType;
+  source_record_id: number;
+  source_reference?: string;
+  match_key: string;
+  department_id?: number;
+  quantity: number;
+  transaction_date: string;
+  reason: string;
+  status: PendingStatus;
+  created_at: string;
+}
+
 export type CSRActivityStatus = "Draft" | "Active" | "Completed" | "Archived";
 
 export interface CSRActivity {
