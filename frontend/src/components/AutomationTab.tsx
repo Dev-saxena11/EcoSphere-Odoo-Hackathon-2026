@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Trash2, RefreshCw, Zap, AlertTriangle, Cpu } from "lucide-react";
+import { Plus, Trash2, Pencil, RefreshCw, Zap, AlertTriangle, Cpu } from "lucide-react";
 import { autoCalculationApi, MappingPayload } from "../api/autoCalculation";
 import { EmissionFactorMapping, PendingAutoCalculation, SourceType } from "../types";
 
@@ -21,6 +21,7 @@ export default function AutomationTab() {
 
   const [form, setForm] = useState<MappingPayload>(EMPTY_MAPPING);
   const [formError, setFormError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const loadAll = async () => {
     setLoading(true);
@@ -57,16 +58,39 @@ export default function AutomationTab() {
     }
   };
 
-  const handleCreateMapping = async (e: React.FormEvent) => {
+  const handleSubmitMapping = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
     try {
-      await autoCalculationApi.createMapping(form);
-      setForm(EMPTY_MAPPING);
+      if (editingId !== null) {
+        await autoCalculationApi.updateMapping(editingId, {
+          match_key: form.match_key,
+          factor_code: form.factor_code,
+        });
+      } else {
+        await autoCalculationApi.createMapping(form);
+      }
+      cancelEdit();
       loadAll();
     } catch (err: any) {
-      setFormError(err.message || "Failed to create mapping");
+      setFormError(err.message || "Failed to save mapping");
     }
+  };
+
+  const startEdit = (mapping: EmissionFactorMapping) => {
+    setEditingId(mapping.id);
+    setForm({
+      source_type: mapping.source_type,
+      match_key: mapping.match_key,
+      factor_code: mapping.factor_code,
+    });
+    setFormError(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(EMPTY_MAPPING);
+    setFormError(null);
   };
 
   const handleDeleteMapping = async (mapping: EmissionFactorMapping) => {
@@ -209,11 +233,16 @@ export default function AutomationTab() {
           </h3>
         </div>
 
-        {/* Create form */}
-        <form onSubmit={handleCreateMapping} className="p-6 border-b border-brand-border space-y-4">
+        {/* Create / Edit form */}
+        <form onSubmit={handleSubmitMapping} className="p-6 border-b border-brand-border space-y-4">
           {formError && (
             <div className="text-xs text-rose-400 bg-rose-950/30 border border-rose-500/30 rounded-lg px-3 py-2">
               {formError}
+            </div>
+          )}
+          {editingId !== null && (
+            <div className="text-xs text-emerald-400 bg-emerald-950/30 border border-emerald-500/20 rounded-lg px-3 py-2">
+              Editing mapping — source type can't be changed; delete and recreate to change it.
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -224,7 +253,8 @@ export default function AutomationTab() {
               <select
                 value={form.source_type}
                 onChange={(e) => setForm({ ...form, source_type: e.target.value as SourceType })}
-                className="w-full bg-slate-900 border border-brand-border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-emerald-500/50"
+                disabled={editingId !== null}
+                className="w-full bg-slate-900 border border-brand-border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-emerald-500/50 disabled:opacity-50"
               >
                 {SOURCE_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -259,14 +289,32 @@ export default function AutomationTab() {
                 required
               />
             </div>
-            <div className="flex items-end">
+            <div className="flex items-end gap-2">
               <button
                 type="submit"
                 className="w-full bg-gradient-emerald text-white py-2 rounded-xl text-sm font-semibold hover:shadow-emerald-950/20 hover:shadow-lg transition-all flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4" />
-                Add Mapping
+                {editingId !== null ? (
+                  <>
+                    <Pencil className="w-4 h-4" />
+                    Save Changes
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    Add Mapping
+                  </>
+                )}
               </button>
+              {editingId !== null && (
+                <button
+                  type="button"
+                  onClick={cancelEdit}
+                  className="shrink-0 bg-slate-900 border border-brand-border text-gray-400 px-4 py-2 rounded-xl text-sm font-semibold hover:text-white hover:bg-slate-800 transition-colors"
+                >
+                  Cancel
+                </button>
+              )}
             </div>
           </div>
         </form>
@@ -307,13 +355,22 @@ export default function AutomationTab() {
                     </span>
                   </td>
                   <td className="p-4 text-right">
-                    <button
-                      onClick={() => handleDeleteMapping(m)}
-                      title="Delete"
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => startEdit(m)}
+                        title="Edit"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-slate-800 transition-colors"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteMapping(m)}
+                        title="Delete"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
