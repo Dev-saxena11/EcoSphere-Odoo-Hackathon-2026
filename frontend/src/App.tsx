@@ -24,7 +24,8 @@ import {
   Zap,
   ArrowUpRight,
   Sun,
-  Moon
+  Moon,
+  Cpu
 } from "lucide-react";
 import {
   AreaChart,
@@ -44,6 +45,8 @@ import {
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
+import AutomationTab from "./components/AutomationTab";
+import DepartmentCarbonTrackingTab from "./components/DepartmentCarbonTrackingTab";
 import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
 import { carbonTransactionsApi } from "./api/carbonTransactions";
 import AuthScreen from "./features/auth/AuthScreen";
@@ -409,7 +412,7 @@ export default function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("ecosphere_token"));
   const [isLightMode, setIsLightMode] = useState(() => localStorage.getItem("theme") === "light");
-  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
+  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "automation" | "department_carbon" | "social" | "governance" | "gamification">("summary");
 
   useEffect(() => {
     localStorage.setItem("theme", isLightMode ? "light" : "dark");
@@ -487,6 +490,8 @@ export default function App() {
               { id: "summary", label: "ESG Summary", icon: LayoutDashboard, color: "text-emerald-400" },
               { id: "environmental", label: "Environmental", icon: Leaf, color: "text-emerald-400" },
               { id: "emission_factors", label: "Emission Factors", icon: Zap, color: "text-emerald-400" },
+              { id: "automation", label: "Automation", icon: Cpu, color: "text-emerald-400" },
+              { id: "department_carbon", label: "Department Carbon", icon: Building2, color: "text-emerald-400" },
               { id: "social", label: "Social", icon: Users, color: "text-teal-400" },
               { id: "governance", label: "Governance", icon: Scale, color: "text-indigo-400" },
               { id: "gamification", label: "XP & Rewards", icon: Trophy, color: "text-amber-400" }
@@ -855,6 +860,10 @@ export default function App() {
           )}
 
           {activeTab === "emission_factors" && <EmissionFactorsTab />}
+
+          {activeTab === "automation" && <AutomationTab />}
+
+          {activeTab === "department_carbon" && <DepartmentCarbonTrackingTab />}
 
           {activeTab === "social" && (
             <div className="space-y-8 animate-fade-in">
