@@ -428,6 +428,31 @@ export default function App() {
       .catch((err) => console.error("Failed to load carbon transactions", err));
   }, []);
 
+  // Play startup sound when the site is opened
+  useEffect(() => {
+    const audio = new Audio("/resources/startup.mp3");
+    audio.volume = 0.6;
+
+    const playAudio = () => {
+      audio.play().catch(() => {
+        // Autoplay blocked — wait for first user interaction
+        const resumeOnInteraction = () => {
+          audio.play().catch(() => {});
+          window.removeEventListener("click", resumeOnInteraction);
+          window.removeEventListener("keydown", resumeOnInteraction);
+        };
+        window.addEventListener("click", resumeOnInteraction);
+        window.addEventListener("keydown", resumeOnInteraction);
+      });
+    };
+
+    playAudio();
+
+    return () => {
+      audio.pause();
+    };
+  }, []);
+
   const handlePolicyAck = (id: number) => {
     setAcknowledgedPolicies((prev) => ({ ...prev, [id]: true }));
   };
