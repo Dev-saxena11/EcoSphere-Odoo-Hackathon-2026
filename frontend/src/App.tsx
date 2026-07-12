@@ -22,7 +22,9 @@ import {
   Briefcase,
   FileCheck,
   Zap,
-  ArrowUpRight
+  ArrowUpRight,
+  Sun,
+  Moon
 } from "lucide-react";
 import {
   AreaChart,
@@ -42,12 +44,9 @@ import {
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
-<<<<<<< HEAD
 import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
 import { carbonTransactionsApi } from "./api/carbonTransactions";
-=======
 import AuthScreen from "./features/auth/AuthScreen";
->>>>>>> b8c4d79 (feat: Add full-stack JWT Registration and Login)
 // TypeScript types from local types file
 import {
   User,
@@ -409,7 +408,12 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("ecosphere_token"));
+  const [isLightMode, setIsLightMode] = useState(() => localStorage.getItem("theme") === "light");
   const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
+
+  useEffect(() => {
+    localStorage.setItem("theme", isLightMode ? "light" : "dark");
+  }, [isLightMode]);
   const [user, setUser] = useState<User>(MOCK_USER);
   const [transactions, setTransactions] = useState<CarbonTransaction[]>([]);
   const [csrActivities, setCsrActivities] = useState<CSRActivity[]>(MOCK_CSR_ACTIVITIES);
@@ -462,7 +466,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex min-h-screen bg-brand-dark">
+    <div className={`flex min-h-screen ${isLightMode ? "light-theme" : ""} bg-brand-dark text-white transition-colors duration-300`}>
       {/* --- SIDEBAR --- */}
       <aside className="w-64 bg-slate-950 border-r border-brand-border flex flex-col justify-between shrink-0">
         <div>
@@ -553,6 +557,18 @@ export default function App() {
               <Sparkles className="w-4 h-4 text-emerald-400 animate-spin" style={{ animationDuration: '3s' }} />
               <span className="text-xs font-bold text-emerald-300">{user.xp_points} XP Available</span>
             </div>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={() => setIsLightMode(!isLightMode)}
+              className="p-2.5 rounded-xl border border-brand-border bg-slate-950/40 hover:bg-slate-900 hover:border-brand-border/80 transition-all duration-300 text-gray-400 hover:text-white flex items-center justify-center relative overflow-hidden group shadow-md"
+              title={isLightMode ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              <div className="relative w-5 h-5 flex items-center justify-center">
+                <Sun className={`absolute w-5 h-5 text-amber-400 transition-all duration-500 transform ${isLightMode ? "scale-100 rotate-0" : "scale-0 -rotate-90"}`} />
+                <Moon className={`absolute w-5 h-5 text-indigo-400 transition-all duration-500 transform ${isLightMode ? "scale-0 rotate-90" : "scale-100 rotate-0"}`} />
+              </div>
+            </button>
 
             <button
               onClick={() => setShowLogModal(true)}
