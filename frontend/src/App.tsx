@@ -20,7 +20,8 @@ import {
   Check,
   DollarSign,
   Briefcase,
-  FileCheck
+  FileCheck,
+  Zap
 } from "lucide-react";
 import {
   AreaChart,
@@ -39,6 +40,7 @@ import {
 
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
+import EmissionFactorsTab from "./components/EmissionFactorsTab";
 // TypeScript types from local types file
 import {
   User,
@@ -258,7 +260,7 @@ const MOCK_ISSUES: ComplianceIssue[] = [
 
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "social" | "governance" | "gamification">("summary");
+  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
   const [user, setUser] = useState<User>(MOCK_USER);
   const [transactions, setTransactions] = useState<CarbonTransaction[]>(MOCK_TRANSACTIONS);
   const [csrActivities, setCsrActivities] = useState<CSRActivity[]>(MOCK_CSR_ACTIVITIES);
@@ -348,6 +350,7 @@ export default function App() {
             {[
               { id: "summary", label: "ESG Summary", icon: LayoutDashboard, color: "text-emerald-400" },
               { id: "environmental", label: "Environmental", icon: Leaf, color: "text-emerald-400" },
+              { id: "emission_factors", label: "Emission Factors", icon: Zap, color: "text-emerald-400" },
               { id: "social", label: "Social", icon: Users, color: "text-teal-400" },
               { id: "governance", label: "Governance", icon: Scale, color: "text-indigo-400" },
               { id: "gamification", label: "XP & Rewards", icon: Trophy, color: "text-amber-400" }
@@ -401,7 +404,11 @@ export default function App() {
             <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">EcoSphere</span>
             <span className="text-gray-600">/</span>
             <span className="text-sm font-semibold capitalize text-gray-300">
-              {activeTab === "summary" ? "Overall Scorecard" : activeTab}
+              {activeTab === "summary"
+                ? "Overall Scorecard"
+                : activeTab === "emission_factors"
+                ? "Emission Factors"
+                : activeTab}
             </span>
           </div>
 
@@ -695,6 +702,8 @@ export default function App() {
               </div>
             </div>
           )}
+
+          {activeTab === "emission_factors" && <EmissionFactorsTab />}
 
           {activeTab === "social" && (
             <div className="space-y-8 animate-fade-in">

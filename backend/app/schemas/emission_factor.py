@@ -35,6 +35,19 @@ class EmissionFactorNewVersion(BaseModel):
     effective_start: date
 
 
+class EmissionFactorUpdate(BaseModel):
+    """Partial update payload for editing an existing factor."""
+
+    name: Optional[str] = Field(None, max_length=255)
+    activity_type: Optional[ActivityType] = None
+    unit: Optional[str] = Field(None, max_length=32)
+    co2e_per_unit: Optional[float] = Field(None, ge=0)
+    source: Optional[str] = Field(None, max_length=512)
+    effective_start: Optional[date] = None
+    effective_end: Optional[date] = None
+    status: Optional[FactorStatus] = None
+
+
 class EmissionFactorRead(EmissionFactorBase):
     model_config = ConfigDict(from_attributes=True)
 
