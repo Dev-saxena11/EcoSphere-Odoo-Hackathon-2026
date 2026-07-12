@@ -635,6 +635,10 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
 }
 
 
+const startupAudio = new Audio("/resources/startup.mp3");
+startupAudio.volume = 0.6;
+let hasPlayed = false;
+
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isLightMode, setIsLightMode] = useState(() => localStorage.getItem("theme") === "light");
@@ -661,36 +665,36 @@ export default function App() {
       .then(setEnvironmentalGoals)
       .catch((err) => console.error("Failed to load environmental goals", err));
 
+  // Audio will be played on user interaction (entering dashboard)
+  const playStartupSound = () => {
+    if (hasPlayed) return;
+    startupAudio.play().then(() => {
+      hasPlayed = true;
+    }).catch(e => console.log("Audio play failed:", e));
+  };
+
   useEffect(() => {
     carbonTransactionsApi
       .list()
       .then(setTransactions)
       .catch((err) => console.error("Failed to load carbon transactions", err));
     loadEnvironmentalGoals();
-  }, []);
 
-  // Play startup sound when the site is opened
-  useEffect(() => {
-    const audio = new Audio("/resources/startup.mp3");
-    audio.volume = 0.6;
+    // Attempt to play on mount
+    playStartupSound();
 
-    const playAudio = () => {
-      audio.play().catch(() => {
-        // Autoplay blocked — wait for first user interaction
-        const resumeOnInteraction = () => {
-          audio.play().catch(() => { });
-          window.removeEventListener("click", resumeOnInteraction);
-          window.removeEventListener("keydown", resumeOnInteraction);
-        };
-        window.addEventListener("click", resumeOnInteraction);
-        window.addEventListener("keydown", resumeOnInteraction);
-      });
+    // Fallback if blocked
+    const fallbackPlay = () => {
+      playStartupSound();
+      window.removeEventListener("click", fallbackPlay);
+      window.removeEventListener("keydown", fallbackPlay);
     };
-
-    playAudio();
+    window.addEventListener("click", fallbackPlay);
+    window.addEventListener("keydown", fallbackPlay);
 
     return () => {
-      audio.pause();
+      window.removeEventListener("click", fallbackPlay);
+      window.removeEventListener("keydown", fallbackPlay);
     };
   }, []);
 
@@ -717,7 +721,10 @@ export default function App() {
   ).length;
 
   if (showLanding) {
-    return <LandingPage onEnterDashboard={() => setShowLanding(false)} />;
+    return <LandingPage onEnterDashboard={() => {
+      playStartupSound();
+      setShowLanding(false);
+    }} />;
   }
 
   return (
