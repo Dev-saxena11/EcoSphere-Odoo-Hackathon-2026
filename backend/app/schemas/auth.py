@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from app.models.user import UserRole
 
 class Token(BaseModel):
@@ -10,18 +10,18 @@ class TokenPayload(BaseModel):
     sub: Optional[int] = None
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class UserCreate(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     full_name: str
     department_id: Optional[int] = None
 
 class UserResponse(BaseModel):
     id: int
-    email: EmailStr
+    email: str
     full_name: str
     role: UserRole
     department_id: Optional[int]
