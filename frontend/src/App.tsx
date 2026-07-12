@@ -439,6 +439,10 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
 }
 
 
+const startupAudio = new Audio("/resources/startup.mp3");
+startupAudio.volume = 0.6;
+let hasPlayed = false;
+
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [isLightMode, setIsLightMode] = useState(() => localStorage.getItem("theme") === "light");
@@ -465,20 +469,38 @@ export default function App() {
       .then(setEnvironmentalGoals)
       .catch((err) => console.error("Failed to load environmental goals", err));
 
+  // Audio will be played on user interaction (entering dashboard)
+  const playStartupSound = () => {
+    if (hasPlayed) return;
+    startupAudio.play().then(() => {
+      hasPlayed = true;
+    }).catch(e => console.log("Audio play failed:", e));
+  };
+
   useEffect(() => {
     carbonTransactionsApi
       .list()
       .then(setTransactions)
       .catch((err) => console.error("Failed to load carbon transactions", err));
     loadEnvironmentalGoals();
-  }, []);
 
-  // Audio will be played on user interaction (entering dashboard)
-  const playStartupSound = () => {
-    const audio = new Audio("/resources/startup.mp3");
-    audio.volume = 0.6;
-    audio.play().catch(e => console.log("Audio play failed:", e));
-  };
+    // Attempt to play on mount
+    playStartupSound();
+
+    // Fallback if blocked
+    const fallbackPlay = () => {
+      playStartupSound();
+      window.removeEventListener("click", fallbackPlay);
+      window.removeEventListener("keydown", fallbackPlay);
+    };
+    window.addEventListener("click", fallbackPlay);
+    window.addEventListener("keydown", fallbackPlay);
+
+    return () => {
+      window.removeEventListener("click", fallbackPlay);
+      window.removeEventListener("keydown", fallbackPlay);
+    };
+  }, []);
 
   const handlePolicyAck = (id: number) => {
     setAcknowledgedPolicies((prev) => ({ ...prev, [id]: true }));
