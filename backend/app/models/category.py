@@ -2,11 +2,17 @@
 from __future__ import annotations
 
 import enum
+from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Enum, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.csr_activity import CSRActivity
+    from app.models.challenge import Challenge
 
 
 class CategoryType(str, enum.Enum):
@@ -32,6 +38,10 @@ class Category(Base):
         nullable=False,
         default=CategoryStatus.ACTIVE,
         index=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now(), nullable=False
     )
 
     __table_args__ = (Index("ix_categories_type_status", "type", "status"),)

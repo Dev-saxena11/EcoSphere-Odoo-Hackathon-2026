@@ -1,8 +1,10 @@
 """ORM models package.
 
-Importing model modules here ensures they are registered on ``Base.metadata``
-so tools like Alembic autogenerate and ``Base.metadata.create_all`` can see them.
+Importing every model module here ensures they are registered on
+``Base.metadata`` so ``Base.metadata.create_all`` and Alembic autogenerate
+can discover every table in one import.
 """
+# ── Teammate-owned models (do not modify these) ────────────────────────────
 from app.models.emission_factor import (  # noqa: F401
     ActivityType,
     EmissionFactor,
