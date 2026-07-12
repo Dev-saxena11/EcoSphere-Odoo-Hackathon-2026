@@ -17,6 +17,16 @@
 
 ---
 
+## 🏆 Hackathon 2026 Acknowledgement
+
+This repo is built for the **Odoo Hackathon 2026** under the Evaluator **Divyesh Vyas** and teammates:
+- Rudra Pratap Singh
+- Aryan Agarwal
+- Dev Saxena
+- Rachit Kanchan
+
+---
+
 ## 🚨 The Problem
 
 Every modern enterprise sits on a goldmine of operational data — fleet logs, procurement records, energy bills, HR reports. Yet when it comes to ESG reporting, teams are still **copy-pasting numbers into spreadsheets**.
@@ -98,7 +108,7 @@ Every modern enterprise sits on a goldmine of operational data — fleet logs, p
                        ▼
 ┌─────────────────────────────────────────────────────────┐
 │                    DATABASE                             │
-│          PostgreSQL (prod) · SQLite (dev)               │
+│       Embedded SQLite (with automatic demo seeding)     │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -269,9 +279,7 @@ npm run dev
 
 ```env
 # backend/.env
-DATABASE_URL=postgresql://user:password@localhost/ecosphere
-SECRET_KEY=your-super-secret-key-here
-ACCESS_TOKEN_EXPIRE_MINUTES=60
+# Note: For the Hackathon MVP, we use local SQLite so DATABASE_URL is not required.
 ```
 
 ---
@@ -282,7 +290,6 @@ All routes are prefixed with `/api/v1/`. Interactive docs available at `/docs`.
 
 | Resource | Endpoints |
 |---|---|
-| `auth` | POST /login, POST /refresh |
 | `users` | CRUD + role assignment |
 | `departments` | CRUD |
 | `emission-factors` | CRUD + bulk import |
@@ -340,7 +347,7 @@ services:
     env: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: python seed.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 ---
