@@ -1,0 +1,10 @@
+"""FastAPI application entry point."""
+from __future__ import annotations
+
+from fastapi import FastAPI
+
+import app.models  # noqa: F401  (register models on Base.metadata)
+from app.api.v1.categories import router as categories_router
+
+app = FastAPI(title="EcoSphere API", version="1.0.0")
+app.include_router(categories_router, prefix="/api/v1")
