@@ -8,7 +8,7 @@ import {
   LeaderboardEntry,
 } from "../types/gamification";
 
-const API_BASE = "http://localhost:8000/api/v1/gamification";
+const API_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/api/v1/gamification`;
 
 // Helper for standard fetch calls
 async function fetchApi<T>(url: string, options?: RequestInit): Promise<T> {
