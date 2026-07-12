@@ -174,24 +174,31 @@ def seed() -> None:
         txns = [
             CarbonTransaction(department_id=depts["ENG"].id, emission_factor_id=ef_elec.id,
                 source=TransactionSource.MANUAL, quantity=5200, calculated_emission=4264.0,
+                factor_value=ef_elec.co2e_per_unit,
                 date=TODAY - timedelta(days=150), notes="Server room Q1"),
             CarbonTransaction(department_id=depts["ENG"].id, emission_factor_id=ef_elec.id,
                 source=TransactionSource.MANUAL, quantity=4800, calculated_emission=3936.0,
+                factor_value=ef_elec.co2e_per_unit,
                 date=TODAY - timedelta(days=90)),
             CarbonTransaction(department_id=depts["ENG"].id, emission_factor_id=ef_elec.id,
                 source=TransactionSource.MANUAL, quantity=4100, calculated_emission=3362.0,
+                factor_value=ef_elec.co2e_per_unit,
                 date=TODAY - timedelta(days=30)),
             CarbonTransaction(department_id=depts["OPS"].id, emission_factor_id=ef_diesel.id,
                 source=TransactionSource.FLEET, quantity=800, calculated_emission=2144.0,
+                factor_value=ef_diesel.co2e_per_unit,
                 date=TODAY - timedelta(days=120)),
             CarbonTransaction(department_id=depts["OPS"].id, emission_factor_id=ef_diesel.id,
                 source=TransactionSource.FLEET, quantity=650, calculated_emission=1742.0,
+                factor_value=ef_diesel.co2e_per_unit,
                 date=TODAY - timedelta(days=60)),
             CarbonTransaction(department_id=depts["FIN"].id, emission_factor_id=ef_air.id,
                 source=TransactionSource.EXPENSE, quantity=12000, calculated_emission=1800.0,
+                factor_value=ef_air.co2e_per_unit,
                 date=TODAY - timedelta(days=100), notes="Q1 client visits"),
             CarbonTransaction(department_id=depts["SCM"].id, emission_factor_id=ef_waste.id,
                 source=TransactionSource.MANUAL, quantity=2000, calculated_emission=900.0,
+                factor_value=ef_waste.co2e_per_unit,
                 date=TODAY - timedelta(days=45)),
         ]
         for t in txns:
@@ -234,12 +241,12 @@ def seed() -> None:
             description="Quarterly blood donation drive in partnership with Red Cross.",
             category_id=cats["blood"].id, date=TODAY + timedelta(days=10),
             location="Company Premises", max_participants=100, xp_reward=200,
-            evidence_required=False, status=ActivityStatus.UPCOMING)
+            evidence_required=False, status=ActivityStatus.ACTIVE)
         csr3 = CSRActivity(title="Community Clean-Up Weekend",
             description="Beach and park clean-up with local NGO.",
             category_id=cats["community"].id, date=TODAY - timedelta(days=5),
             location="Juhu Beach, Mumbai", max_participants=30, xp_reward=100,
-            evidence_required=True, status=ActivityStatus.ONGOING)
+            evidence_required=True, status=ActivityStatus.ACTIVE)
         db.add_all([csr1, csr2, csr3])
         db.flush()
 

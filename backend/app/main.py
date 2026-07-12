@@ -8,6 +8,7 @@ import app.models  # noqa: F401  (register models on Base.metadata)
 from app.api.v1.auth import router as auth_router
 from app.api.v1.auto_calculation import router as auto_calculation_router
 from app.api.v1.carbon_transactions import router as carbon_transactions_router
+from app.api.v1.carbon_analytics import router as carbon_analytics_router
 from app.api.v1.categories import router as categories_router
 from app.api.v1.csr_activities import router as csr_activities_router
 from app.api.v1.department_scores import router as department_scores_router
@@ -31,6 +32,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(auto_calculation_router, prefix="/api/v1")
 app.include_router(carbon_transactions_router, prefix="/api/v1")
+app.include_router(carbon_analytics_router, prefix="/api/v1")
 app.include_router(categories_router, prefix="/api/v1")
 app.include_router(csr_activities_router, prefix="/api/v1")
 app.include_router(department_scores_router, prefix="/api/v1")
