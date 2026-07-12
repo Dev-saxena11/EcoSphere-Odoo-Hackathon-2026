@@ -22,7 +22,8 @@ import {
   Briefcase,
   FileCheck,
   Zap,
-  ArrowUpRight
+  ArrowUpRight,
+  Cpu
 } from "lucide-react";
 import {
   AreaChart,
@@ -42,6 +43,7 @@ import {
 import GamificationTab from "./components/GamificationTab";
 import GovernanceTab from "./components/GovernanceTab";
 import EmissionFactorsTab from "./components/EmissionFactorsTab";
+import AutomationTab from "./components/AutomationTab";
 import ManualCarbonEntryModal from "./components/ManualCarbonEntryModal";
 import { carbonTransactionsApi } from "./api/carbonTransactions";
 // TypeScript types from local types file
@@ -404,7 +406,7 @@ function LandingPage({ onEnterDashboard }: { onEnterDashboard: () => void }) {
 
 export default function App() {
   const [showLanding, setShowLanding] = useState(true);
-  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "social" | "governance" | "gamification">("summary");
+  const [activeTab, setActiveTab] = useState<"summary" | "environmental" | "emission_factors" | "automation" | "social" | "governance" | "gamification">("summary");
   const [user, setUser] = useState<User>(MOCK_USER);
   const [transactions, setTransactions] = useState<CarbonTransaction[]>([]);
   const [csrActivities, setCsrActivities] = useState<CSRActivity[]>(MOCK_CSR_ACTIVITIES);
@@ -463,6 +465,7 @@ export default function App() {
               { id: "summary", label: "ESG Summary", icon: LayoutDashboard, color: "text-emerald-400" },
               { id: "environmental", label: "Environmental", icon: Leaf, color: "text-emerald-400" },
               { id: "emission_factors", label: "Emission Factors", icon: Zap, color: "text-emerald-400" },
+              { id: "automation", label: "Automation", icon: Cpu, color: "text-emerald-400" },
               { id: "social", label: "Social", icon: Users, color: "text-teal-400" },
               { id: "governance", label: "Governance", icon: Scale, color: "text-indigo-400" },
               { id: "gamification", label: "XP & Rewards", icon: Trophy, color: "text-amber-400" }
@@ -520,6 +523,8 @@ export default function App() {
                 ? "Overall Scorecard"
                 : activeTab === "emission_factors"
                 ? "Emission Factors"
+                : activeTab === "automation"
+                ? "Automation"
                 : activeTab}
             </span>
           </div>
@@ -816,6 +821,8 @@ export default function App() {
           )}
 
           {activeTab === "emission_factors" && <EmissionFactorsTab />}
+
+          {activeTab === "automation" && <AutomationTab />}
 
           {activeTab === "social" && (
             <div className="space-y-8 animate-fade-in">
