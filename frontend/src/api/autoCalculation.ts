@@ -28,6 +28,12 @@ export interface MappingPayload {
   is_active?: boolean;
 }
 
+export interface MappingUpdatePayload {
+  match_key?: string;
+  factor_code?: string;
+  is_active?: boolean;
+}
+
 export interface IngestOutcome {
   status: "created" | "updated" | "flagged" | "disabled";
   detail: string;
@@ -49,6 +55,11 @@ export const autoCalculationApi = {
   createMapping: (payload: MappingPayload) =>
     fetchApi<EmissionFactorMapping>("/emission-factor-mappings", {
       method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  updateMapping: (id: number, payload: MappingUpdatePayload) =>
+    fetchApi<EmissionFactorMapping>(`/emission-factor-mappings/${id}`, {
+      method: "PUT",
       body: JSON.stringify(payload),
     }),
   deleteMapping: (id: number) =>
