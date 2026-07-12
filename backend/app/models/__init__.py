@@ -8,5 +8,13 @@ from app.models.emission_factor import (  # noqa: F401
     EmissionFactor,
     FactorStatus,
 )
+from app.models.category import Category, CategoryStatus, CategoryType  # noqa: F401
 
-__all__ = ["ActivityType", "EmissionFactor", "FactorStatus"]
+__all__ = [
+    "ActivityType",
+    "EmissionFactor",
+    "FactorStatus",
+    "Category",
+    "CategoryStatus",
+    "CategoryType",
+]
