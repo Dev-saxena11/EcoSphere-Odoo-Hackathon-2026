@@ -15,7 +15,8 @@ export default function AuthScreen({ onLogin }: AuthScreenProps) {
   const [error, setError] = useState('');
 
   // Use environment variable for API URL or fallback to local
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const API_URL = rawApiUrl.endsWith('/') ? rawApiUrl.slice(0, -1) : rawApiUrl;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
